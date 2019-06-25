@@ -73,7 +73,7 @@ class Header extends Component {
         <Link href='/'>
           <div className='logo-container'>
             <img className='logo' alt='logo' src={`${staticFolder}/logo.png`} />
-            <span className='sys-name'>Next-Antd-Scafflod</span>
+            <span className='sys-name'>Nobibi-next</span>
           </div>
         </Link>
         <h2>{title}</h2>
