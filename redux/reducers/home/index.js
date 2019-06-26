@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
+import channel from './channel';
+import topic from './topic';
 
 export default combineReducers({
-  counter
+  channel,
+  topic
 });

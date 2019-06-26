@@ -5,18 +5,13 @@ import Header from './Header';
 const Layout = ({ title, children }) => (
   <Fragment>
     <style jsx>{`
-      .content-container {
-        position: relative;
+      .main-container {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 70px 20px 20px 20px;
-        padding: 10px 20px;
-        background-color: #fff;
+        justify-content: center;
       }
     `}</style>
     <Header title={title} />
-    <div className='content-container'>
+    <div className='main-container'>
       {children}
     </div>
   </Fragment>

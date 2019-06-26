@@ -1,8 +1,8 @@
-// const API url
+const BASE_URL = 'http://localhost:3001';
 export default {
   /**
    * Get user list
    * @method GET
    */
-  getUserList: `https://jsonplaceholder.typicode.com/users`
+  getTopicList: BASE_URL + '/api/topic/getTopicList'
 };
