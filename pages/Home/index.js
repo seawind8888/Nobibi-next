@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import TopicItem from '../../components/TopicItem';
 import './index.less';
 import {connect} from 'react-redux';
-import { fetchTopicListData } from '../../redux/actions/home';
 
 class Home extends Component {
   static propTypes = {
     topicListInfo: PropTypes.array.isRequired,
   }
+
   
   constructor (props) {
     super(props);
@@ -24,7 +24,7 @@ class Home extends Component {
               return (
                 <TopicItem
                   key={i}
-                  title={e.title}
+                  title={e.topicTitle}
                 ></TopicItem>
               );
             })
@@ -35,15 +35,20 @@ class Home extends Component {
     );
   }
 }
+
 Home.getInitialProps = async ({ctx}) => {
   const { store } = ctx;
-  store.dispatch(fetchTopicListData());
+  store.dispatch({
+    type: 'FETCH_TOPIC_LIST'
+  });
   return {};
 };
-
 const mapStateToProps = state => ({
-  topicListInfo: state.home.topic.list
+  topicListInfo: state.topic.list
 });
+
+
+
 
 
 export default connect(mapStateToProps)(Home);

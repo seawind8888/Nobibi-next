@@ -1,9 +1,11 @@
 
 import { Avatar, Tag } from 'antd';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
 import './index.less';
 
-const TopicItem = () => (
+
+const TopicItem = (props) => (
   <div className='topic-container'>
     <div className='left-item'>
       <Avatar 
@@ -14,7 +16,7 @@ const TopicItem = () => (
       <h1>
         <Link 
           href='/topic/1'>
-          dwadwaddwadwadwawadawdawdawdawdawdawdawadawdawdawdawdawdawdadwadawdawdwad
+          {props.title}
         </Link>
       </h1>
       
@@ -27,4 +29,7 @@ const TopicItem = () => (
     </div>
   </div>
 );
+TopicItem.propTypes = {
+  title: PropTypes.string.isRequired
+};
 export default TopicItem;

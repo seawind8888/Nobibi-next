@@ -2,7 +2,7 @@ import {
   FETCH_TOPIC_LIST,
   FETCH_TOPIC_LIST_SUCCESS,
   FETCH_TOPIC_LIST_FAIL
-} from '../../../constants/ActionTypes';
+} from '../../constants/ActionTypes';
     
     
 const initialState = {
@@ -12,6 +12,10 @@ const initialState = {
 const topic = (state = initialState, { type, data }) => {
   switch (type) {
     case FETCH_TOPIC_LIST:
+      return {
+        ...state,
+        
+      };
     case FETCH_TOPIC_LIST_SUCCESS:
       return {
         ...state,
