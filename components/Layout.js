@@ -1,74 +1,33 @@
 import { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, message } from 'antd';
 const { SubMenu } = Menu;
-import { getChannelList } from '../api';
-import './Layout.less';
+import { getChannelList, userLogOut } from '../api';
 import {connect} from 'react-redux';
+import Router from 'next/router';
+import Cookies from 'js-cookie';
+import './Layout.less';
 
 
 
-// const NLayout = ({ title, children }) => (
-//   <Fragment>
-//     <style jsx>{`
-//       .main-container {
-//         display: flex;
-//         justify-content: center;
-//       }
-//     `}</style>
-//     <div style={{display: 'flex'}}>
-//       <Menu 
-//         className='menu-group-left'
-//         defaultSelectedKeys={['1']}
-//         defaultOpenKeys={['sub1']}
-//         mode='inline'
-//         theme='light'
-//         inlineIndent={0}
-//         inlineCollapsed={false}>
-//         <Menu.Item 
-//           key='home'>
-//           <Icon type='home' />
-//                 首页 
-//         </Menu.Item>
-//         <SubMenu
-//           key='topic'
-//           title={
-//             <span>
-//               <Icon type='notification' />
-//               <span>主题</span>
-//             </span>
-//           }>
-//           <Menu.Item key='2'>Option 2</Menu.Item>
-//           <Menu.Item key='3'>Option 3</Menu.Item>
-//         </SubMenu>
-//       </Menu>
-//       <div>
-//         <Header title={title} />
-//         <div className='main-container'>
-//           {children}
-//         </div>
-//       </div>
-//     </div>
-   
-    
-//   </Fragment>
-// );
-// export default NLayout;
 class Layout extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.any.isRequired,
     channelList: PropTypes.array,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    userInfo: PropTypes.object.isRequired
   };
+  
   static defaultProps = {
     channelList: []
   }
   constructor(props){
     super(props);
     this.handleChangeCollapsed = this.handleChangeCollapsed.bind(this);
-    this.handleSelectItem = this.handleSelectItem.bind(this);
+    this.handleSelectMenu = this.handleSelectMenu.bind(this);
+    this.handleSelectUserItem = this.handleSelectUserItem.bind(this);
     this.state = {
       collapsed: true,
       channelList: []
@@ -81,6 +40,16 @@ class Layout extends Component {
         channelList: data.list
       });
     }
+    const _userCode = Cookies.get('username');
+    if (_userCode) {
+      this.props.dispatch({
+        type: 'GET_USER_INFO',
+        payload: {
+          username: _userCode
+        }
+      });
+    }
+   
     
   }
   handleChangeCollapsed() {
@@ -88,23 +57,43 @@ class Layout extends Component {
       collapsed: !prevState.collapsed
     }));
   }
-  handleSelectItem(e) {
+  handleSelectMenu(e) {
     const {dispatch} = this.props;
-    dispatch({
-      type: 'FETCH_TOPIC_LIST',
-      payload: {_id: e.key}
-    });
+    if (e.key === 'home') {
+      Router.push('/');
+     
+    } else {
+      dispatch({
+        type: 'FETCH_TOPIC_LIST',
+        payload: {_id: e.key}
+      });
+    }
+   
   }
+  async handleSelectUserItem(e) {
+    const {dispatch} = this.props;
+    switch (e.key) {
+      case 'signOut':
+        var res = await userLogOut();
+        if (res.success) {
+          message.success(res.message);
+          dispatch({
+            type: 'USER_SIGN_OUT'
+          });
+        }
+        Cookies.remove('username');
+        break;
+      case 'modifyPass':
+        Router.push('/ModifyPass');
+        break;
+      
+    }
+  }
+  
   
   render() {
     return (
       <Fragment>
-        <style jsx>{`
-          .main-container {
-            display: flex;
-            justify-content: center;
-          }
-        `}</style>
         <div style={{display: 'flex'}}>
           <Menu 
             className='menu-group-left'
@@ -112,6 +101,7 @@ class Layout extends Component {
             defaultOpenKeys={['sub1']}
             mode='inline'
             theme='light'
+            onClick={this.handleSelectMenu}
             inlineCollapsed={this.state.collapsed}>
             <Menu.Item 
               key='home'>
@@ -131,7 +121,6 @@ class Layout extends Component {
                   return (
                     <Menu.Item  
                       key={e._id}
-                      onClick={this.handleSelectItem}
                     >{e.categoryName}</Menu.Item>
                   );
                 })
@@ -140,11 +129,15 @@ class Layout extends Component {
             </SubMenu>
           </Menu>
           
-          <div>
+          <div style={{width: '100%'}}>
             <Header 
               title={this.props.title} 
               onToggle={this.handleChangeCollapsed}
-              channelList={this.state.channelList}/>
+              isCollapsed={this.state.collapsed}
+              channelList={this.state.channelList}
+              userInfo={this.props.userInfo}
+              onMenuClick={this.handleSelectMenu}
+              onUserClick={this.handleSelectUserItem}/>
             <div className='main-container'>
               {this.props.children}
             </div>
@@ -157,4 +150,6 @@ class Layout extends Component {
 
 
 
-export default connect(state => state)(Layout);
+export default connect(state => ({
+  userInfo: state.user.userInfo
+}))(Layout);

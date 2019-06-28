@@ -6,16 +6,12 @@ import {
     
     
 const initialState = {
-
+  list: []
 };
     
 const topic = (state = initialState, { type, data }) => {
   switch (type) {
     case FETCH_TOPIC_LIST:
-      return {
-        ...state,
-        
-      };
     case FETCH_TOPIC_LIST_SUCCESS:
       return {
         ...state,

@@ -6,7 +6,14 @@ import {connect} from 'react-redux';
 
 class Home extends Component {
   static propTypes = {
-    topicListInfo: PropTypes.array.isRequired,
+    topicListInfo: PropTypes.array.isRequired
+  }
+  static async getInitialProps ({ctx}) {
+    const { store } = ctx;
+    store.dispatch({
+      type: 'FETCH_TOPIC_LIST'
+    });
+    return {};
   }
 
   
@@ -15,7 +22,7 @@ class Home extends Component {
   }
   
   render() {
-    const {topicListInfo = []} = this.props;
+    const {topicListInfo} = this.props;
     return (
       <Fragment>
         <div className='home-container'>
@@ -25,6 +32,9 @@ class Home extends Component {
                 <TopicItem
                   key={i}
                   title={e.topicTitle}
+                  category={e.category}
+                  userName={e.userName}
+                  updateTime={e.updateTime}
                 ></TopicItem>
               );
             })
@@ -36,20 +46,9 @@ class Home extends Component {
   }
 }
 
-Home.getInitialProps = async ({ctx}) => {
-  const { store } = ctx;
-  store.dispatch({
-    type: 'FETCH_TOPIC_LIST'
-  });
-  return {};
-};
-const mapStateToProps = state => ({
+
+
+export default connect(state => ({
   topicListInfo: state.topic.list
-});
-
-
-
-
-
-export default connect(mapStateToProps)(Home);
+}))(Home);
 

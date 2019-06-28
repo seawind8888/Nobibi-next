@@ -3,6 +3,7 @@ import { Avatar, Tag } from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import './index.less';
+import timer from '../../utils/timer';
 
 
 const TopicItem = (props) => (
@@ -16,20 +17,24 @@ const TopicItem = (props) => (
       <h1>
         <Link 
           href='/topic/1'>
-          {props.title}
+          <a>
+            {props.title}
+          </a>
+          
         </Link>
       </h1>
-      
-      {/* <p className='desc'>dwadwaddwawadawdawdawdawdawdawdawadawdawdawdawdawdawdawadawdawdawdawdawdawdawdawd</p> */}
       <div className='bottom-info'>
-        <Tag>Tag 1</Tag>·
-        <span>dwad</span>·
-        <span>dwad</span>
+        <Tag>{props.category[0]}</Tag>·
+        <span className='info-item'>{props.userName}</span>·
+        <span className='info-item'>{timer(Date.parse(props.updateTime))}</span>
       </div>
     </div>
   </div>
 );
 TopicItem.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  category: PropTypes.array.isRequired,
+  userName: PropTypes.string.isRequired,
+  updateTime: PropTypes.string.isRequired
 };
 export default TopicItem;

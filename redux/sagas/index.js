@@ -1,11 +1,31 @@
 
 import {  all, call, take, put, fork } from 'redux-saga/effects';
-import { getTopicList } from '../../api';
+import {  getUserInfo, getTopicList } from '../../api';
 
 import {
   FETCH_TOPIC_LIST,
-  FETCH_TOPIC_LIST_SUCCESS
+  FETCH_TOPIC_LIST_SUCCESS,
+  GET_USER_INFO,
+  GET_USER_INFO_SUCCESS,
+  USER_SIGN_OUT
 } from '../../constants/ActionTypes';
+
+export function* userInfo() {
+  while (true) {
+    const { payload = {}} = yield take(GET_USER_INFO);
+    const { data } = yield call(getUserInfo, payload);
+    yield put({
+      type: GET_USER_INFO_SUCCESS,
+      data
+    });
+  }
+}
+
+export function* userSignOut() {
+  while (true) {
+    yield take(USER_SIGN_OUT);
+  }
+}
 
 export function* topicList() {
   while (true) {
@@ -21,6 +41,8 @@ export function* topicList() {
 
 export default function* rootSagas() {
   yield all([
-    fork(topicList)
+    fork(topicList),
+    fork(userInfo),
+    fork(userSignOut)
   ]);
 }
