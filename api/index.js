@@ -38,10 +38,34 @@ export const getTopicList = (params) => {
   });
 };
 
+export const createTopic = (params) => {
+  return fetch({
+    method: 'post',
+    url: '/api/topic/createTopic',
+    data: params
+  });
+};
+
 export const getChannelList = (params) => {
   return fetch({
     method: 'get',
     url: '/api/category/getCategoryList',
     params: params
+  });
+};
+
+export const getCommentList = (params) => {
+  return fetch({
+    method: 'get',
+    url: '/api/comment/getCommentList',
+    params: params
+  });
+};
+
+export const addComment = (params) => {
+  return fetch({
+    method: 'post',
+    url: '/api/comment/addComment',
+    data: params
   });
 };

@@ -1,10 +1,9 @@
-import { Component, Fragment } from 'react';
+import { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import TopicItem from '../../components/TopicItem';
-import './index.less';
+import TopicItem from '../components/TopicItem';
 import {connect} from 'react-redux';
 
-class Home extends Component {
+class Home extends PureComponent {
   static propTypes = {
     topicListInfo: PropTypes.array.isRequired
   }
@@ -25,12 +24,14 @@ class Home extends Component {
     const {topicListInfo} = this.props;
     return (
       <Fragment>
-        <div className='home-container'>
+        <div className='main-inside-container home-container'>
           <div className='list-item-container'>
             {topicListInfo.map((e, i) => {
               return (
                 <TopicItem
                   key={i}
+                  avatar={e.userAvatar}
+                  id={e._id}
                   title={e.topicTitle}
                   category={e.category}
                   userName={e.userName}
@@ -39,6 +40,11 @@ class Home extends Component {
               );
             })
             }
+          </div>
+          <div className='home-right-container'>
+            <div className='ad-container'>
+              广告位招租
+            </div>
           </div>
         </div>
       </Fragment>

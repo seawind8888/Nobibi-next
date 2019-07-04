@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Header from './Header';
 import { Menu, Icon, message } from 'antd';
 const { SubMenu } = Menu;
-import { getChannelList, userLogOut } from '../api';
+import { userLogOut } from '../api';
 import {connect} from 'react-redux';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
@@ -29,17 +29,18 @@ class Layout extends Component {
     this.handleSelectMenu = this.handleSelectMenu.bind(this);
     this.handleSelectUserItem = this.handleSelectUserItem.bind(this);
     this.state = {
-      collapsed: true,
-      channelList: []
+      collapsed: true
     };
   }
   async componentWillMount () {
-    const {data} = await getChannelList();
-    if (data.list.length > 0) {
-      this.setState({
-        channelList: data.list
-      });
-    }
+    
+    // const {data} = await getChannelList();
+    // if (data.list.length > 0) {
+    //   this.setState({
+    //     channelList: data.list
+    //   });
+    // }
+    this.props.dispatch({type:'FETCH_CHANNEL_LIST'});
     const _userCode = Cookies.get('username');
     if (_userCode) {
       this.props.dispatch({
@@ -59,15 +60,13 @@ class Layout extends Component {
   }
   handleSelectMenu(e) {
     const {dispatch} = this.props;
-    if (e.key === 'home') {
-      Router.push('/');
-     
-    } else {
+    Router.push('/');
+    if (e.key !== 'home') {
       dispatch({
         type: 'FETCH_TOPIC_LIST',
-        payload: {_id: e.key}
+        payload: {category: e.key}
       });
-    }
+    } 
    
   }
   async handleSelectUserItem(e) {
@@ -92,6 +91,7 @@ class Layout extends Component {
   
   
   render() {
+    const { channelList } = this.props;
     return (
       <Fragment>
         <div style={{display: 'flex'}}>
@@ -117,10 +117,10 @@ class Layout extends Component {
                 </span>
               }>
               {
-                this.state.channelList.map(e => {
+                channelList.map(e => {
                   return (
                     <Menu.Item  
-                      key={e._id}
+                      key={e.categoryName}
                     >{e.categoryName}</Menu.Item>
                   );
                 })
@@ -134,7 +134,7 @@ class Layout extends Component {
               title={this.props.title} 
               onToggle={this.handleChangeCollapsed}
               isCollapsed={this.state.collapsed}
-              channelList={this.state.channelList}
+              channelList={channelList}
               userInfo={this.props.userInfo}
               onMenuClick={this.handleSelectMenu}
               onUserClick={this.handleSelectUserItem}/>
@@ -151,5 +151,6 @@ class Layout extends Component {
 
 
 export default connect(state => ({
-  userInfo: state.user.userInfo
+  userInfo: state.user.userInfo,
+  channelList: state.channel.list
 }))(Layout);

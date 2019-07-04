@@ -5,7 +5,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 const fs = require('fs');
 const path = require('path');
-
+const withCSS = require('@zeit/next-css')
 // Where your antd-custom.less file lives
 const themeVariables = lessToJS(
   fs.readFileSync(
@@ -33,12 +33,14 @@ if (typeof require !== 'undefined') {
   require.extensions['.less'] = (file) => {}
 }
 
-module.exports = withLess({
+module.exports = withLess(
+  withCSS({
   lessLoaderOptions: {
     javascriptEnabled: true,
     modifyVars: themeVariables,
     localIdentName: '[local]___[hash:base64:5]',
   },
+  
   webpack: (config, { buildId, dev, isServer, defaultLoaders }) => {
     if (!dev) {
       config.plugins.push(
@@ -88,6 +90,7 @@ module.exports = withLess({
     }
     return config;
   },
+  
   webpackDevMiddleware: config => {
     // Perform customizations to webpack dev middleware config
     // console.log(config, '@@')
@@ -105,4 +108,5 @@ module.exports = withLess({
   env: {
     SERVER_HOST: 'http://www.luffyzhou.cn'
   }
-});
+})
+)

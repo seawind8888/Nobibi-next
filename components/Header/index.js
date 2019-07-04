@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon, Dropdown } from 'antd';
+import { Menu, Icon, Dropdown, Button } from 'antd';
 const { SubMenu } = Menu;
 import Link from 'next/link';
 import './index.less';
@@ -72,15 +72,16 @@ class Header extends Component {
                 </span>
               }>
               {
-                channelList.map((e, i) => {
+                channelList.map(e => {
                   return (
                     <Menu.Item 
                       onClick={onMenuClick}
-                      key={i}>{e.categoryName}</Menu.Item>
+                      key={e.categoryName}>{e.categoryName}</Menu.Item>
                   );
                 })
               }
             </SubMenu>
+            
           </Menu>
           {userInfo.userName ?
             <section className='button-group'>
@@ -89,14 +90,14 @@ class Header extends Component {
                   {userInfo.userName} <Icon type='down' />
                 </a>
               </Dropdown>
-             
+              <Button style={{marginLeft: '10px'}} type='primary' href='/topicEdit'>Bibi一下</Button>
             </section> :
             <section className='button-group'>
-              <Link href='/Login'>
+              <Link href='/login'>
                 <a>登录</a>
               </Link>
               <div className='text-button-container'>
-                <Link href='/Register'>
+                <Link href='/register'>
                   <a>注册</a>
                 </Link>
               </div>

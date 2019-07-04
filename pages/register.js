@@ -1,12 +1,14 @@
-import { Component, Fragment } from 'react';
+import {  PureComponent, Fragment } from 'react';
 import { Form, Input, Icon, Button } from 'antd';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {userRegister} from '../../api';
+import {userRegister} from '../api';
 import { message } from 'antd';
 import Router from 'next/router';
+import { getRandomColor } from '../utils';
 
-class Register extends Component {
+
+class Register extends PureComponent {
   static propTypes = {
     form:PropTypes.object.isRequired
   }
@@ -18,6 +20,7 @@ class Register extends Component {
         return;
         // console.log('Received values of form: ', values);
       }
+      values.avatar = getRandomColor();
       const data = await userRegister(values);
       if (data.success) {
         message.success('注册成功，欢迎来到不bibi，也请别bibi');

@@ -1,15 +1,14 @@
-import { Component, Fragment } from 'react';
+import { PureComponent, Fragment } from 'react';
 import { Form, Input, Icon, Checkbox, Button } from 'antd';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {userLogin} from '../../api';
+import {userLogin} from '../api';
 import Cookies from 'js-cookie';
 import { message } from 'antd';
 import Router from 'next/router';
 import md5 from 'md5';
 
-
-class Login extends Component {
+class Login extends PureComponent {
   
     static propTypes = {
       form:PropTypes.object.isRequired,
@@ -78,7 +77,7 @@ class Login extends Component {
                 Forgot password
               </a>
               <Button type='primary' htmlType='submit' className='login-form-button'>
-                Log in
+                登录
               </Button>
           Or <a href=''>register now!</a>
             </Form.Item>

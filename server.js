@@ -16,9 +16,9 @@ app.prepare()
   .then(() => {
     const server = express();
 
-    server.get('/user/userDetail/:username', (req, res) => {
-      const { username } = req.params;
-      return app.render(req, res, '/user/userDetail', { username });
+    server.get('/topicDetail/:id', (req, res) => {
+      const { id } = req.params;
+      return app.render(req, res, '/topicDetail', { id });
     });
 
     server.get('*', (req, res) => {

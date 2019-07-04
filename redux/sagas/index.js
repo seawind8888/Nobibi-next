@@ -1,10 +1,12 @@
 
 import {  all, call, take, put, fork } from 'redux-saga/effects';
-import {  getUserInfo, getTopicList } from '../../api';
+import {  getUserInfo, getTopicList, getChannelList } from '../../api';
 
 import {
   FETCH_TOPIC_LIST,
   FETCH_TOPIC_LIST_SUCCESS,
+  FETCH_CHANNEL_LIST,
+  FETCH_CHANNEL_LIST_SUCCESS,
   GET_USER_INFO,
   GET_USER_INFO_SUCCESS,
   USER_SIGN_OUT
@@ -38,11 +40,23 @@ export function* topicList() {
   }
 }
 
+export function* channelList() {
+  while (true) {
+    const { payload = {}} = yield take(FETCH_CHANNEL_LIST);
+    const { data } = yield call(getChannelList, payload);
+    yield put({
+      type: FETCH_CHANNEL_LIST_SUCCESS,
+      data
+    });
+  }
+}
+
 
 export default function* rootSagas() {
   yield all([
     fork(topicList),
     fork(userInfo),
-    fork(userSignOut)
+    fork(userSignOut),
+    fork(channelList)
   ]);
 }
