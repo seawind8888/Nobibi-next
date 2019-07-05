@@ -1,17 +1,18 @@
 import { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Header from './Header';
+import Header from '../Header';
+import NoFooter from '../NoFooter';
 import { Menu, Icon, message } from 'antd';
 const { SubMenu } = Menu;
-import { userLogOut } from '../api';
+import { userLogOut } from '../../api';
 import {connect} from 'react-redux';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
-import './Layout.less';
+import './index.less';
 
 
 
-class Layout extends Component {
+class NoLayout extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.any.isRequired,
@@ -34,12 +35,6 @@ class Layout extends Component {
   }
   async componentWillMount () {
     
-    // const {data} = await getChannelList();
-    // if (data.list.length > 0) {
-    //   this.setState({
-    //     channelList: data.list
-    //   });
-    // }
     this.props.dispatch({type:'FETCH_CHANNEL_LIST'});
     const _userCode = Cookies.get('username');
     if (_userCode) {
@@ -82,8 +77,8 @@ class Layout extends Component {
         }
         Cookies.remove('username');
         break;
-      case 'modifyPass':
-        Router.push('/ModifyPass');
+      case 'changePass':
+        Router.push('/changePass');
         break;
       
     }
@@ -141,6 +136,7 @@ class Layout extends Component {
             <div className='main-container'>
               {this.props.children}
             </div>
+            <NoFooter />
           </div>
         </div>
       </Fragment>
@@ -153,4 +149,4 @@ class Layout extends Component {
 export default connect(state => ({
   userInfo: state.user.userInfo,
   channelList: state.channel.list
-}))(Layout);
+}))(NoLayout);

@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'next-antd-scaffold',
+      name: 'Nobibi',
       script: './server.js',
       cwd: './', // current workspace
       watch: [

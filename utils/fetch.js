@@ -21,7 +21,6 @@ export default function fetch (options) {
       });
     })
     .catch(error => {
-      console.log(error);
       if (typeof window !== 'undefined')  {
         message.info(error || 'Network Error');
       }

@@ -17,7 +17,14 @@ export const userLogOut = () => {
 export const userRegister = (params) => {
   return fetch({
     method: 'post',
-    url: '/api/user/createUser',
+    url: '/api/user/updateUser',
+    data: params
+  });
+};
+export const changePassApi = (params) => {
+  return fetch({
+    method: 'post',
+    url: '/api/user/changePass',
     data: params
   });
 };
@@ -34,6 +41,13 @@ export const getTopicList = (params) => {
   return fetch({
     method: 'get',
     url: '/api/topic/getTopicList',
+    params: params
+  });
+};
+export const updateTopicItem = (params) => {
+  return fetch({
+    method: 'get',
+    url: '/topic/updateTopic',
     params: params
   });
 };

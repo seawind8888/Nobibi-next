@@ -1,9 +1,9 @@
 
 import {  Tag } from 'antd';
-import NoAvatar from './NoAvatar';
+import NoAvatar from '../NoAvatar';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import timer from '../utils/timer';
+import timer from '../../utils/timer';
 
 const TopicItem = (props) => {
   return (

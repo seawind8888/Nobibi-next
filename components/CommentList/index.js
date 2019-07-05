@@ -1,13 +1,16 @@
 import {  PureComponent } from 'react';
-import { Comment,  List, Avatar, message} from 'antd';
+import { Comment,  List,  message} from 'antd';
 import Editor from '../Editor';
 import { getCommentList, addComment } from '../../api';
 import PropTypes from 'prop-types';
 import timer from '../../utils/timer';
+import {connect} from 'react-redux';
+import NoAvatar from '../NoAvatar';
 
 class CommentList extends PureComponent {
   static propTypes = {
-    topicTitle: PropTypes.string.isRequired
+    topicTitle: PropTypes.string.isRequired,
+    userInfo: PropTypes.object.isRequired
   };
   constructor(props) {
     super(props);
@@ -18,7 +21,12 @@ class CommentList extends PureComponent {
     submitting: false,
     content: '',
   };
-  async componentDidMount() {
+  componentDidMount() {
+   
+    this.getCommentList();
+  
+  }
+  getCommentList = async () => {
     const { topicTitle } = this.props;
     const { data } = await getCommentList({
       topicTitle: topicTitle
@@ -27,12 +35,11 @@ class CommentList extends PureComponent {
       this.setState({
         comments: this.initComment(data.list)
       });
-    
   }
  
 
   handleSubmit = async () => {
-    const { topicTitle } = this.props;
+    const { topicTitle, userInfo } = this.props;
     if (!this.state.content) {
       return;
     }
@@ -43,30 +50,16 @@ class CommentList extends PureComponent {
 
     const { success } = await addComment({
       topicTitle: topicTitle,
+      userName: userInfo.userName,
       content: this.state.content
     });
     this.setState({
       submitting: false
     });
     if (success) {
-      message('bibi成功啦!');
+      message.success('bibi成功啦!');
+      this.getCommentList();
     }
-
-    // setTimeout(() => {
-    //   this.setState({
-    //     submitting: false,
-    //     content: '',
-    //     comments: [
-    //       {
-    //         author: 'Han Solo',
-    //         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    //         content: <p>{this.state.content}</p>,
-    //         datetime: moment().fromNow(),
-    //       },
-    //       ...this.state.comments,
-    //     ],
-    //   });
-    // }, 1000);
   };
 
   initComment = (list) => {
@@ -75,7 +68,7 @@ class CommentList extends PureComponent {
         author: e.userName,
         avatar: e.avatar,
         content: e.content,
-        datetime: timer(e.updateTime)
+        datetime: timer(Date.parse(e.updateTime))
       };
     });
   }
@@ -90,6 +83,7 @@ class CommentList extends PureComponent {
 
   render() {
     const { comments, submitting, content } = this.state;
+    const { userInfo } = this.props;
 
     return (
       <div>
@@ -97,13 +91,26 @@ class CommentList extends PureComponent {
           dataSource={comments}
           header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
           itemLayout='horizontal'
-          renderItem={props => <Comment {...props} />}
+          renderItem={item => 
+            <Comment 
+              avatar={
+                <NoAvatar
+                  avatar={item.avatar}
+                  userName={item.userName}
+                  size={32}
+                />
+              }
+              author={item.author}
+              content={item.content}
+              datetime={item.datetime}
+            />}
         />}
         <Comment
           avatar={
-            <Avatar
-              src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-              alt='Han Solo'
+            <NoAvatar
+              avatar={userInfo.avatar}
+              userName={userInfo.userName}
+              size={32}
             />
           }
           content={
@@ -119,4 +126,7 @@ class CommentList extends PureComponent {
     );
   }
 }
-export default CommentList;
+
+export default connect(state => ({
+  userInfo: state.user.userInfo
+}))(CommentList);

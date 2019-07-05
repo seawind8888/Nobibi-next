@@ -91,11 +91,19 @@
       font-size: 46px;
       word-wrap: break-word;
   }
-  .user-info-container {
+  .main-info-container {
       display: flex;
+      position: relative;
       .user-avatar {
           margin-right: 10px;
           
+      }
+      .control-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
       }
   }
   .topic-content-container {

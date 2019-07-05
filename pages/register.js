@@ -51,7 +51,7 @@ class Register extends PureComponent {
             })(
               <Input
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder='Username'
+                placeholder='用户名'
               />,
             )}
           </Form.Item>
@@ -62,7 +62,7 @@ class Register extends PureComponent {
               <Input.Password 
                 prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type='password'
-                placeholder='Password'
+                placeholder='密码'
               />
             )}
           </Form.Item>
@@ -85,15 +85,15 @@ class Register extends PureComponent {
               rules: [{ required: true, message: 'Please input your Email' }],
             })(
               <Input
-                prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type='email'
-                placeholder='email'
+                placeholder='邮箱'
               />,
             )}
           </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit' className='login-form-button'>
-                Register in
+                注册
             </Button>
           </Form.Item>
         </Form>

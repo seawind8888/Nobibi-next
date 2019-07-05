@@ -30,7 +30,7 @@ class Header extends Component {
       <Menu
         onClick={onUserClick}>
         <Menu.Item
-          key='modifyPass'>
+          key='changePass'>
           修改密码
         </Menu.Item>
         <Menu.Divider />

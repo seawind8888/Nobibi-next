@@ -6,6 +6,7 @@ import {userLogin} from '../api';
 import Cookies from 'js-cookie';
 import { message } from 'antd';
 import Router from 'next/router';
+import Link from 'next/link';
 import md5 from 'md5';
 
 class Login extends PureComponent {
@@ -36,7 +37,6 @@ class Login extends PureComponent {
             });
             Router.push('/');
           }
-          // console.log('Received values of form: ', values);
         }
         
       });
@@ -72,14 +72,12 @@ class Login extends PureComponent {
               {getFieldDecorator('remember', {
                 valuePropName: 'checked',
                 initialValue: true,
-              })(<Checkbox>Remember me</Checkbox>)}
-              <a className='login-form-forgot' href=''>
-                Forgot password
-              </a>
+              })(<Checkbox>记住</Checkbox>)}
+              <Link href='/'>忘记密码</Link>
               <Button type='primary' htmlType='submit' className='login-form-button'>
                 登录
               </Button>
-          Or <a href=''>register now!</a>
+          Or <Link href='/login'>注册</Link>
             </Form.Item>
           </Form>
         </Fragment>
