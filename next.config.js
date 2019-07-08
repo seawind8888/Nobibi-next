@@ -96,6 +96,17 @@ module.exports = withLess(
         },
         loader: 'eslint-loader'
       });
+      config.plugins.push(
+        ...[
+          new DefinePlugin({
+            'process.env': {
+              BASE_URL: JSON.stringify('http://localhost:3001')
+            }
+            
+          })
+        ]
+      )
+     
       config.devtool = 'cheap-module-inline-source-map';
     }
     return config;
