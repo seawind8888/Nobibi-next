@@ -6,6 +6,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 const fs = require('fs');
 const path = require('path');
 const withCSS = require('@zeit/next-css')
+const { DefinePlugin } = require('webpack');
+const { parsed } = require('dotenv').config();
+const { BASE_URL } = parsed;
 // Where your antd-custom.less file lives
 const themeVariables = lessToJS(
   fs.readFileSync(
@@ -64,6 +67,13 @@ module.exports = withLess(
               ie8: false
             }
           }),
+          new DefinePlugin({
+            'process.env': {
+              BASE_URL: JSON.stringify(BASE_URL)
+            }
+            
+          })
+          
       ]);
       config.devtool = 'source-map';
     } else {
@@ -99,14 +109,11 @@ module.exports = withLess(
   },
   serverRuntimeConfig: { // Will only be available on the server side
     rootDir: path.join(__dirname, './'),
-    PORT: isDev ? 3006 : (process.env.PORT || 5999)
+    PORT: isDev ? 3006 : (process.env.PORT || 3006)
   },
   publicRuntimeConfig: { // Will be available on both server and client
     staticFolder: '/static',
     isDev, // Pass through env variables
-  },
-  env: {
-    SERVER_HOST: 'http://www.luffyzhou.cn'
   }
 })
 )

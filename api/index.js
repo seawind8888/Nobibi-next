@@ -17,7 +17,7 @@ export const userLogOut = () => {
 export const userRegister = (params) => {
   return fetch({
     method: 'post',
-    url: '/api/user/updateUser',
+    url: '/api/user/createUser',
     data: params
   });
 };
